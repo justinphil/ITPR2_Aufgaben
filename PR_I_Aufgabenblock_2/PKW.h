@@ -21,16 +21,20 @@ public:
 
 	virtual ~PKW() = default;
 
+	// Getter Methoden
 	double dGeschwindigkeit() const;
 	double dGesamtVerbrauch() const;
 	virtual double dTanken(double dMenge = -1.0);
 
+	// Methoden
 	virtual void vSimulieren();
 	void vZeichnen(const Weg& weg) const;
 
+	// Ausgabe
 	void vAusgeben() const;
 	std::ostream& vAusgeben(std::ostream& o) const;
 	
+	// Operator overloading
 	PKW& operator=(const PKW &pkw);
 
 private:

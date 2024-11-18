@@ -84,17 +84,18 @@ void Fahrzeug::vNeueStrecke(Weg& weg, double dStartzeitpunkt) {
 }
 
 void Fahrzeug::vSimulieren() {
+	// Prüfen ob ein Verhalten vorhanden ist
+    if (!p_pVerhalten) return;
 
-    //if (!p_pVerhalten) return;
-    //if(fabs(dGlobaleZeit - p_dZeit) < 1e-6) return;
+	// Prüfen ob die GlobaleZeit gleich der Zeit des Fahrzeugs ist
+    if(fabs(dGlobaleZeit - p_dZeit) < 1e-6) return;
 
 	double dZeitIntervall = dGlobaleZeit - p_dZeit;
-	
 	p_dGesamtZeit += dZeitIntervall;
 	p_dZeit = dGlobaleZeit;
 
+	// Berechnen der Strecke die das Fahrzeug zurücklegt
     double dStrecke = p_pVerhalten->dStrecke(*this, dZeitIntervall);
-
     p_dAbschnittStrecke += dStrecke;
     p_dGesamtStrecke += dStrecke;
     

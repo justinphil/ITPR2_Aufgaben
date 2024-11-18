@@ -16,6 +16,7 @@ public:
 		std::cout << "Ausnahme Streckenende ist aufgetreten mit Fahrzeug und Weg:" << std::endl;
 		std::cout << pFahrzeug << std::endl << pWeg << std::endl << std::endl;
 
+		// Fahrzeug aus Weg entfernen
 		pWeg.pAbgabe(pFahrzeug);
 	}
 };

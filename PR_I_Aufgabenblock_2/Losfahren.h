@@ -14,6 +14,10 @@ public:
 	Losfahren(Fahrzeug& fz, Weg& weg) : Fahrausnahme(fz, weg) {}
 	~Losfahren() = default; 
 
+	/*
+	@brief: Bearbeitet die Fahrausnahme
+	@return: void
+	*/
 	void vBearbeiten() const override {
 		std::cout << "Fahrausnahme: Losfahren Mit Fahrzeug und Weg:" << std::endl;
 		std::cout << pFahrzeug << std::endl << pWeg << std::endl << std::endl;

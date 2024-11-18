@@ -17,6 +17,10 @@ public:
 	Fahrrad(std::string sName, double dMaxgeschwindigkeit) : Fahrzeug(sName, dMaxgeschwindigkeit) {}
 	virtual ~Fahrrad() = default;
 
+	// Getter Methoden
+	/*
+	@brief: Gibt die Geschwindigkeit des Fahrrads zurück
+	*/
 	double dGeschwindigkeit() const;
 
 };

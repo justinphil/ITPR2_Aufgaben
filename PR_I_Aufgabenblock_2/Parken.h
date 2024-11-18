@@ -14,6 +14,11 @@ public:
 		: Verhalten(pWeg), p_dStartZeitpunkt(dStartZeitpunkt) {}
 	virtual ~Parken() = default;
 
+	/*
+	@brief Berechnet die Strecke, die ein Fahrzeug in einem bestimmten Zeitintervall zurücklegt
+	@param fz Referenz auf ein Fahrzeug
+	@param dZeitIntervall Zeitintervall, in dem die Strecke berechnet wird
+	*/
 	double dStrecke(Fahrzeug& fz, double dZeitIntervall) const override;
 
 private:

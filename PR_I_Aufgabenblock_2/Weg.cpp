@@ -17,12 +17,15 @@
 
 
 void Weg::vSimulieren() {
+	// Iteriere über alle Fahrzeuge auf dem Weg
     for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
 
         try {
+			// Simuliere das Fahrzeug
         	(*it)->vSimulieren();
         } catch (const Fahrausnahme& ex) {
-        	ex.vBearbeiten();
+			// Behandle die Fahrausnahme
+			ex.vBearbeiten();
         }
     }
 
@@ -30,16 +33,19 @@ void Weg::vSimulieren() {
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fz) {
+	// Setze die neue Strecke des Fahrzeugs auf den Weg
 	fz->vNeueStrecke(*this);
 	p_pFahrzeuge.push_back(std::move(fz));
 }
 
 void Weg::vAnnahme(std::unique_ptr<Fahrzeug> fz, const double dStartzeitpunkt) {
+	// Setze die neue Strecke des Fahrzeugs auf den Weg, mit einem Startzeitpunkt
 	fz->vNeueStrecke(*this, dStartzeitpunkt);
 	p_pFahrzeuge.push_back(std::move(fz));
 }
 
 std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fz) {
+	// Iteriere über alle Fahrzeuge auf dem Weg
     for (auto it = p_pFahrzeuge.begin(); it != p_pFahrzeuge.end(); ++it) {
 		// Ob der Zeiger nicht null ist und der dereferenzierte Zeiger mit dem gegebenen Fahrzeug übereinstimmt
         if (*it && **it == fz) {
@@ -52,6 +58,7 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fz) {
 }
 
 void Weg::vZeichnen() const {
+	// Iteriere über alle Fahrzeuge auf dem Weg und zeichne sie
 	for (auto& it : p_pFahrzeuge) {
 			it->vZeichnen(*this);
 	    }

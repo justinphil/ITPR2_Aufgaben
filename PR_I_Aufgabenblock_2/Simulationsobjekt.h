@@ -20,13 +20,17 @@ public:
 
 	virtual ~Simulationsobjekt() = default;
 
-	virtual void vSimulieren() = 0;
-	virtual void vAusgeben() const;
-	virtual std::ostream& vAusgeben(std::ostream& out) const;
-
 	std::string getName() const { return p_sName; }
 	int getID() const { return p_iID; }
 
+	// Rein virtuelle Methode
+	virtual void vSimulieren() = 0;
+
+	// Ausgabe Methoden
+	virtual void vAusgeben() const;
+	virtual std::ostream& vAusgeben(std::ostream& out) const;
+
+	// Operator Overloading
 	Simulationsobjekt& operator=(const Simulationsobjekt& x);
 
 protected:

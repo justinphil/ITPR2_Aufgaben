@@ -17,6 +17,7 @@ public:
 	Fahrausnahme(Fahrzeug& fz, Weg& weg) : pFahrzeug(fz), pWeg(weg) {}
 	virtual ~Fahrausnahme() = default;
 
+	// Rein virtuelle Methode
 	virtual void vBearbeiten() const = 0;
 
 

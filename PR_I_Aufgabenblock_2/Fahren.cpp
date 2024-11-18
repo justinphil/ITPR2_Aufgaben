@@ -15,13 +15,13 @@ double Fahren::dStrecke(Fahrzeug& fz, double dZeitIntervall) const {
 	double dStreckeWegende = p_pWeg.dGetLaenge()- fz.dGetAbschnittstrecke();
 	// Strecke die das Fahrzeug mit normaler Geschwindigkeit zuruecklegen wuerde
 	double dStreckeGeschwindigkeit = fz.dGeschwindigkeit() * dZeitIntervall;
-
+	// Wenn die Strecke die das Fahrzeug zuruecklegen wuerde groesser ist als die Strecke bis zum Wegende
 	if (fabs(dStreckeWegende - 0.0) < 1e-6)
 	{
 		throw Streckenende(fz, p_pWeg); // Streckenende erreicht
 	}
 
-	//
+	// Minimum der beiden Strecken
 	return std::min<double>(dStreckeWegende, dStreckeGeschwindigkeit);
 
 }

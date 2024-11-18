@@ -26,6 +26,7 @@ public:
 
 	virtual ~Weg() = default;
 
+	// Getter Methoden
 	Tempolimit getTempolimit() const { return p_eTempoLimit; }
 	double dGetLaenge() const { return p_dLaenge; }
 
@@ -45,6 +46,7 @@ public:
 	void vAnnahme(std::unique_ptr<Fahrzeug> fz, const double dStartzeitpunkt);
 	/*
 	@brief Abgabe eines Fahrzeugs auf dem Weg
+	@params const Fahrzeug& fz
 	*/
 	std::unique_ptr<Fahrzeug> pAbgabe(const Fahrzeug& fz);
 
@@ -53,6 +55,7 @@ public:
 	 */
 	void vZeichnen() const;
 
+	// Ausgabe Methoden
 	static void vKopf();
 	virtual std::ostream& vAusgeben(std::ostream& out) const;
 private:

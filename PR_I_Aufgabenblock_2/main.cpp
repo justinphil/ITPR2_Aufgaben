@@ -375,7 +375,7 @@ void vAufgabe_AB1() {
 
 
 int main () {
-	int auswahl = 6;
+	int auswahl = 5;
 
 	do {
 	        std::cout << "\nWelche Aufgabe möchten Sie ausführen?\n";
