@@ -43,7 +43,11 @@ double PKW::dGeschwindigkeit() const {
 
 void PKW::vZeichnen(const Weg& weg) const {
 	// Berechne die rel. Position des PKWs auf der Strasse
-	double rPos = p_dGesamtStrecke / weg.dGetLaenge();
+	double rPos = p_dAbschnittStrecke / weg.dGetLaenge();
+
+	if (rPos < 0) rPos = 0;
+	if (rPos > 1) rPos = 1;
+
 	bZeichnePKW(p_sName, weg.getName(), rPos, dGeschwindigkeit(), p_dTankinhalt);
 }
 

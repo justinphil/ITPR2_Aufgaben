@@ -144,8 +144,6 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	             }
 	            return;
 	        }
-
-
 	    }
 
 	}

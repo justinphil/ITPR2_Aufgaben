@@ -451,7 +451,7 @@ void vAufgabe_9a() {
 
 	try {
 		simulation.vEinlesen(datei, true);
-		simulation.vSimulieren(20.0, 1.0);
+		simulation.vSimulieren(20.0, 0.25);
 
     }
 	catch (std::runtime_error& e) {
