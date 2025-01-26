@@ -11,7 +11,7 @@
 
 #include "Simulationsobjekt.h"
 #include "Verhalten.h"
-#include "Simuclient.h"
+#include "SimuClient.h"
 
 class Weg;
 // class Verhalten;

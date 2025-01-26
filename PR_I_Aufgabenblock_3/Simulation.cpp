@@ -30,21 +30,25 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	        std::istringstream iss(line);
 	        std::string type;
 	        iss >> type;
+
 	        try {
 	            if (type == "KREUZUNG") {
 	                std::string name;
 					double tankstelle;
+					int posX, posY;
 
-	                iss >> name >> tankstelle;
+	                iss >> name >> tankstelle >> posX >> posY;
+
+	                //std::cout << name << std::endl;
+
 					if (p_kreuzungen.find(name) != p_kreuzungen.end()) {
 	                    throw std::runtime_error("Kreuzung mit dem Namen:  " + name + " existiert bereits!");
 	                }
 
-	                 auto kr = std::make_shared<Kreuzung>(name,tankstelle);
-	                p_kreuzungen[name] = kr;
+	                auto kr = std::make_shared<Kreuzung>(name,tankstelle);
+	                std::cout << *kr << std::endl;
+	                p_kreuzungen[name] = std::move(kr);
 					if(bMitGrafik){
-						int posX, posY;
-						iss >> posX >> posY;
 	                    bZeichneKreuzung(posX, posY);
 					}
 
@@ -54,6 +58,7 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	                double laenge;
 	                int tempolimit;
 	                bool ueberholverbot;
+
 	                iss >> nameQ >> nameZ >> nameW1 >> nameW2 >> laenge >> tempolimit >> ueberholverbot;
 
 					auto itQ = p_kreuzungen.find(nameQ);
@@ -65,18 +70,19 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 						 throw std::runtime_error("Kreuzung kann nicht gefunden werden: " + nameZ);
 					}
 
-					std::shared_ptr<Kreuzung>  start = itQ->second;
+					std::shared_ptr<Kreuzung> start = itQ->second;
 	                std::shared_ptr<Kreuzung> ziel = itZ->second;
 
 					Tempolimit eTempolimit;
-					if(tempolimit == 1) eTempolimit = Tempolimit::Innerorts;
-					else if (tempolimit == 2) eTempolimit = Tempolimit::Landstrasse;
-					else if (tempolimit == 3) eTempolimit = Tempolimit::Autobahn;
-					else {
-	                    throw std::runtime_error("Invalides Tempolimit!");
+					switch (tempolimit) {
+					case 1: eTempolimit = Tempolimit::Innerorts; break;
+					case 2: eTempolimit = Tempolimit::Landstrasse; break;
+					case 3: eTempolimit = Tempolimit::Autobahn; break;
+					default:
+						throw std::runtime_error("Invalides Tempolimit!");
 					}
 
-	                Kreuzung::vVerbinde(nameW1, nameW2, laenge, start, ziel, eTempolimit, ueberholverbot);
+	                Kreuzung::vVerbinde(start, ziel, nameW1, nameW2, laenge, eTempolimit, ueberholverbot);
 	                if(bMitGrafik){
 	                    int anzKoords;
 	                    iss >> anzKoords;
@@ -87,7 +93,7 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	                    bZeichneStrasse(nameW1, nameW2, laenge, anzKoords, coords);
 	                    delete[] coords;
 	                }
-
+	                std::cout << *start << std::endl;
 
 	            } else if (type == "PKW") {
 	            	std::string name;
@@ -106,8 +112,8 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	                    throw std::runtime_error("Start-Kreuzung kann nicht gefunden werden: " + nameS);
 					}
 
-
-	                itS->second->vAnnahme(std::move(pkw), startZeit);
+					std::cout << *pkw << std::endl;
+	                p_kreuzungen[nameS]->vAnnahme(std::move(pkw), startZeit);
 
 	            }else if (type == "FAHRRAD") {
 	                std::string name;
@@ -123,7 +129,7 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	                    throw std::runtime_error("Start-Kreuzung kann nicht gefunden werden: " + nameS);
 					}
 
-	                itS->second->vAnnahme(std::move(fahrrad), startZeit);
+					p_kreuzungen[nameS]->vAnnahme(std::move(fahrrad), startZeit);
 
 
 	            } else if(type != "") {
@@ -148,19 +154,26 @@ void Simulation::vEinlesen(std::istream& i, bool bMitGrafik) {
 	}
 
 void Simulation::vSimulieren() {
-	for (double time = 0; time < 10; time += 0.25) {
+	for (dGlobaleZeit = 0; dGlobaleZeit < 10; dGlobaleZeit += 0.25) {
 		for (auto& it : p_kreuzungen) {
 			it.second->vSimulieren();
+			vSetzeZeit(dGlobaleZeit);
+			it.second->vZeichnen();
+
+			std::cout << *(it.second) << std::endl;
 		}
+
 		std::cout << "------------------------------------------------" << std::endl;
 	}
 
 }
 
 void Simulation::vSimulieren(double dDauer, double dZeitschritt) {
-    for (double time = 0; time < dDauer; time += dZeitschritt) {
+    for (dGlobaleZeit = 0; dGlobaleZeit < dDauer; dGlobaleZeit += dZeitschritt) {
         for (auto& it : p_kreuzungen) {
             it.second->vSimulieren();
+            vSetzeZeit(dGlobaleZeit);
+            it.second->vZeichnen();
         }
 		std::cout << "------------------------------------------------" << std::endl;
     }

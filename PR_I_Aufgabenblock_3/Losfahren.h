@@ -24,9 +24,12 @@ public:
 
 		auto fz_ptr = pWeg.pAbgabe(pFahrzeug);
 
-		if(fz_ptr)
+		if(fz_ptr) {
 			pWeg.vAnnahme(std::move(fz_ptr));
+		} else {
+			std::cerr << "Fehler: Fahrzeug konnte nicht entfernt werden!" << std::endl;
 		}
+	}
 
 };
 

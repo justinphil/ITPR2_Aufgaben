@@ -40,7 +40,7 @@ Fahrzeug::Fahrzeug(std::string sName, double dMaxGeschwindigkeit)
 
 Fahrzeug::~Fahrzeug() {
 
-	delete p_pVerhalten.get();
+	//delete p_pVerhalten.get();
 
 	//std::cout << "Das Fahrzeug: " << p_iID << " mit dem Namen " << p_sName << " wurde geloescht!" << std::endl;
 }
@@ -64,7 +64,7 @@ double Fahrzeug::dGetAbschnittstrecke() const {
 }
 
 void Fahrzeug::vNeueStrecke(Weg& weg) {
-	delete p_pVerhalten.get(); //  Memory Leak vermeiden
+	//delete p_pVerhalten.get(); //  Memory Leak vermeiden
 
 	p_pVerhalten = std::make_shared<Fahren>(weg);
 	p_dAbschnittStrecke = 0.0;
@@ -72,7 +72,7 @@ void Fahrzeug::vNeueStrecke(Weg& weg) {
 }
 
 void Fahrzeug::vNeueStrecke(Weg& weg, double dStartzeitpunkt) {
-	delete p_pVerhalten.get(); //  Memory Leak vermeiden
+	//delete p_pVerhalten.get(); //  Memory Leak vermeiden
 
 	p_pVerhalten = std::make_shared<Parken>(weg, dStartzeitpunkt);
 	p_dAbschnittStrecke = 0.0;

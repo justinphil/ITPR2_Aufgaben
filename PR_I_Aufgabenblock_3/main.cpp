@@ -337,12 +337,12 @@ void vAufgabe_7() {
 	auto car1 = make_unique<PKW>("Tesla", 120, 4);
 	auto bike1 = make_unique<Fahrrad>("Obama", 24);
 
-    Kreuzung::vVerbinde("W12", "W21", 40.0, kr1, kr2, Tempolimit::Innerorts, true);
-    Kreuzung::vVerbinde("W23a", "W32a", 115.0, kr2, kr3, Tempolimit::Autobahn, false);
-    Kreuzung::vVerbinde("W23b", "W32b", 40.0, kr2, kr3, Tempolimit::Innerorts, true);
-    Kreuzung::vVerbinde("W24", "W42", 55.0, kr2, kr4, Tempolimit::Innerorts, true);
-    Kreuzung::vVerbinde("W34", "W43", 85.0, kr3, kr4, Tempolimit::Autobahn, false);
-	Kreuzung::vVerbinde("W44a", "W44b", 130.0, kr4, kr1, Tempolimit::Landstrasse, true);
+    Kreuzung::vVerbinde(kr1, kr2,"W12", "W21", 40.0,  Tempolimit::Innerorts, true);
+    Kreuzung::vVerbinde(kr2, kr3, "W23a", "W32a", 115.0, Tempolimit::Autobahn, false);
+    Kreuzung::vVerbinde(kr2, kr3, "W23b", "W32b", 40.0, Tempolimit::Innerorts, true);
+    Kreuzung::vVerbinde(kr2, kr4, "W24", "W42", 55.0, Tempolimit::Innerorts, true);
+    Kreuzung::vVerbinde(kr3, kr4, "W34", "W43", 85.0, Tempolimit::Autobahn, false);
+	Kreuzung::vVerbinde(kr4, kr1, "W44a", "W44b", 130.0, Tempolimit::Landstrasse, true);
 
 	kr1->vAnnahme(std::move(car1), 4.0);
 	kr1->vAnnahme(std::move(bike1), 1.8);
@@ -445,7 +445,7 @@ void vAufgabe_9a() {
     std::ifstream datei("SimuDisplay.dat");
 
     if (!datei.is_open()) {
-        std::cerr << "Failed to open file 'SimuDisplay.dat'" << std::endl;
+        std::cerr << "Fehler beim oeffnen 'SimuDisplay.dat'" << std::endl;
         return;
     }
 
@@ -455,7 +455,7 @@ void vAufgabe_9a() {
 
     }
 	catch (std::runtime_error& e) {
-		std::cerr << "Error: " << e.what() << std::endl;
+		std::cerr << "Fehler: " << e.what() << std::endl;
 	}
 
     datei.close();
@@ -512,7 +512,7 @@ void vAufgabe_AB1() {
 
 
 int main () {
-	int auswahl = 7;
+	int auswahl = 11;
 
 	do {
 	        std::cout << "\nWelche Aufgabe möchten Sie ausführen?\n"

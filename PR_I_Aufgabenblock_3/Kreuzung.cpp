@@ -13,46 +13,57 @@
 
 
 std::shared_ptr<Weg> Kreuzung::pZufaelligerWeg(Weg& weg) {
+
 	if(p_pWege.empty()){
 		return nullptr;
 	}
 
-	// Zufällige Auswahl eines Weges
-	std::vector<std::shared_ptr<Weg>> auswahl;
-	for (auto& w : p_pWege) {
-		auswahl.push_back(w);
+	std::shared_ptr<Weg> neuer_weg = nullptr;
+
+	if (p_pWege.size() == 1)
+	{
+		return p_pWege.front();
 	}
 
-	if (auswahl.empty()) {
-		// Sackgasse: zurück auf den alten Weg
-		for (auto& w : p_pWege) {
-			if (*w == weg) {
-				return w;
+	do
+	{
+		int iRnd = rand() % p_pWege.size();
+		int i = 0;
+
+		for (auto it = p_pWege.begin(); it != p_pWege.end(); ++it)
+		{
+			if (i++ >= iRnd)
+			{
+				neuer_weg = *it;
+				break;
 			}
 		}
-		return nullptr;
-	}
 
-	// Zufallsgenerator
-	static std::mt19937 device(0);
-	std::uniform_int_distribution<int> dist(0, auswahl.size() - 1);
-	int zufallsIndex = dist(device);
-	return auswahl[zufallsIndex];
+	} while (neuer_weg == weg.pGetRueckweg());
+
+	return neuer_weg;
 }
+
 
 
 void Kreuzung::vSimulieren() {
 	for(auto& it : p_pWege) {
 
 		if(it) {
-			it->vSimulieren();
+			try{
+				it->vSimulieren();
+			} catch(const Fahrausnahme& e) {
+				e.vBearbeiten();
+				std::cout << e.what() << std::endl;
+			}
+
 		}
 
 	}
 }
 
-void Kreuzung::vVerbinde(const std::string& nameHin, const std::string& nameRueck, double laenge,
-        std::shared_ptr<Kreuzung>& startKreuzung, std::shared_ptr<Kreuzung>& zielKreuzung, const Tempolimit tempolimit, const bool ueberholverbot) {
+void Kreuzung::vVerbinde(std::shared_ptr<Kreuzung>& startKreuzung, std::shared_ptr<Kreuzung>& zielKreuzung, const std::string& nameHin, const std::string& nameRueck, double laenge,
+        const Tempolimit tempolimit, const bool ueberholverbot) {
 
 
 	std::shared_ptr<Weg> wegHin = std::make_shared<Weg>(nameHin, laenge,  tempolimit, ueberholverbot);
@@ -70,7 +81,7 @@ void Kreuzung::vVerbinde(const std::string& nameHin, const std::string& nameRuec
 	startKreuzung->p_pWege.push_back(wegHin);
 	zielKreuzung->p_pWege.push_back(wegRueck);
 
-	std::cout << "Verbindung " << nameHin << " und " << nameRueck << " zwischen " << startKreuzung->getID() << " und " << zielKreuzung->getName() << " erstellt." << std::endl;
+	std::cout << "Verbindung " << nameHin << " und " << nameRueck << " zwischen " << startKreuzung->getName() << " und " << zielKreuzung->getName() << " erstellt." << std::endl;
 }
 
 void Kreuzung::vTanken(Fahrzeug& fz) {
@@ -87,27 +98,21 @@ void Kreuzung::vTanken(Fahrzeug& fz) {
 }
 
 void Kreuzung::vAnnahme(std::unique_ptr<Fahrzeug> pFz, double dStartZeit) {
-	if (p_dTankstelle > 0.0) {
-        pFz->dTanken();
-	}
-	if (!p_pWege.empty()) {
+	//std::cout << *pFz << " ist angenommen! olaf " << std::endl;
+
+	if (p_pWege.empty()) {
 		return;
 	}
 
 	std::shared_ptr<Weg> weg = p_pWege.front();
 
-	if (dStartZeit < 0.0) {
+	//std::cout << *pFz << " ist angenommen!" << std::endl;
 
-		if (weg) {
-			weg->vAnnahme(std::move(pFz));
-		}
+	this->vTanken(*pFz);
 
-	} else {
-
-		if(weg) {
-			weg->vAnnahme(std::move(pFz), dStartZeit);
-		}
-
+	if(weg) {
+		std::cout << *weg << std::endl;
+		weg->vAnnahme(std::move(pFz), dStartZeit);
 	}
 
 }
@@ -119,12 +124,12 @@ void Kreuzung::vZeichnen() const {
 }
 
 std::ostream& Kreuzung::vAusgeben(std::ostream& out) const {
-	Simulationsobjekt::vAusgeben(out);
-	std::cout << "Tankstelle Volumen: " << p_dTankstelle << " Liter" << std::endl;
+	Simulationsobjekt::vAusgeben(out)
+	<< "Tankstelle Volumen: " << p_dTankstelle << " Liter" << std::endl;
 	for (const auto& weg : p_pWege) {
-		weg->vAusgeben(out);
+		weg->vAusgeben(out) << std::endl;
 	}
-
+	out << std::endl;
 	return out;
 }
 

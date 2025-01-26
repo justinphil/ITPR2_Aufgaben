@@ -22,7 +22,7 @@ void Weg::vSimulieren() {
 
 	// Iteriere über alle Fahrzeuge auf dem Weg
     for (auto& it : p_pFahrzeuge) {
-
+    	//std::cout << *it << std::endl;
         try {
 			// Simuliere das Fahrzeug
         	it->vSimulieren();
@@ -54,12 +54,12 @@ std::unique_ptr<Fahrzeug> Weg::pAbgabe(const Fahrzeug& fz) {
        return *fzg_ptr == fz;
    });
 
-    if (it == p_pFahrzeuge.end())
+   if (it == p_pFahrzeuge.end())
    {
        return nullptr;
    }
 
-   auto fahrzeug_ptr = std::move(*it);
+   std::unique_ptr<Fahrzeug> fahrzeug_ptr = std::move(*it);
    p_pFahrzeuge.erase(it);
 
    return fahrzeug_ptr;
@@ -84,8 +84,10 @@ std::ostream& Weg::vAusgeben(std::ostream& o) const {
 	Simulationsobjekt::vAusgeben(o)
 			<< std::setprecision(2) << std::fixed << std::resetiosflags(std::ios::left)
 			<< std::setiosflags(std::ios::right) << std::setw(12) << Weg::p_dLaenge
-			<< (p_bUeberholverbot ? " Ja " : " Nein ")
+			<<  (p_bUeberholverbot ? "Ja" : "Nein")
 			<< std::resetiosflags(std::ios::right) << " ( ";
+
+
 
 		for (auto &it : p_pFahrzeuge)
 		{

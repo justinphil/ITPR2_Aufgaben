@@ -16,12 +16,13 @@
 #include "Weg.h"
 #include "Tempolimit.h"
 #include "Fahrzeug.h"
+#include "Fahrausnahme.h"
 
 class Kreuzung: public Simulationsobjekt {
 public:
 	// Konstruktoren und Destruktor
 	Kreuzung() : Simulationsobjekt() , p_dTankstelle(0) {}
-	Kreuzung(std::string sName, const double dTankstelle = 0) : Simulationsobjekt(), p_dTankstelle(dTankstelle) {}
+	Kreuzung(std::string sName, const double dTankstelle = 0) : Simulationsobjekt(sName), p_dTankstelle(dTankstelle) {}
 	virtual ~Kreuzung() = default;
 
 	// Getter Methoden
@@ -29,8 +30,8 @@ public:
 
 	// Methoden
 	std::shared_ptr<Weg> pZufaelligerWeg(Weg& weg);
-	static void vVerbinde(const std::string& nameHin, const std::string& nameRueck, double laenge,
-	        std::shared_ptr<Kreuzung>& startKreuzung, std::shared_ptr<Kreuzung>& zielKreuzung, const Tempolimit tempolimit, const bool ueberholverbot);
+	static void vVerbinde(std::shared_ptr<Kreuzung>& startKreuzung, std::shared_ptr<Kreuzung>& zielKreuzung, const std::string& nameHin, const std::string& nameRueck, double laenge,
+	         const Tempolimit tempolimit, const bool ueberholverbot);
 	void vTanken(Fahrzeug& fz);
 	void vAnnahme(std::unique_ptr<Fahrzeug> pFz, double dStartZeit);
 	void vSimulieren();
