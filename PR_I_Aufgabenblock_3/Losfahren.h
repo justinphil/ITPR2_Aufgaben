@@ -24,6 +24,7 @@ public:
 
 		auto fz_ptr = pWeg.pAbgabe(pFahrzeug);
 
+		std::cout << fz_ptr->getName() << " wurde abgegeben!" << std::endl;
 		if(fz_ptr) {
 			pWeg.vAnnahme(std::move(fz_ptr));
 		} else {

@@ -50,13 +50,7 @@ void Kreuzung::vSimulieren() {
 	for(auto& it : p_pWege) {
 
 		if(it) {
-			try{
-				it->vSimulieren();
-			} catch(const Fahrausnahme& e) {
-				e.vBearbeiten();
-				std::cout << e.what() << std::endl;
-			}
-
+			it->vSimulieren();
 		}
 
 	}
